@@ -1,23 +1,19 @@
 {
   "name": "secondclosetapi",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "db:reset": "node ./db/reset.js"
+    "start": "node ./bin/www",
+    "db:reset": "node ./dataBase/reset.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NKadish/second-closet-api.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/NKadish/second-closet-api/issues"
-  },
-  "homepage": "https://github.com/NKadish/second-closet-api#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1",
+    "pg-native": "^3.0.0"
   }
 }

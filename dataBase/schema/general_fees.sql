@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS general_fees CASCADE;
+CREATE TABLE general_fees (
+    id SERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    amount INTEGER
+);
