@@ -25,6 +25,24 @@ module.exports = ({
     
   });
 
+  router.get("/:customerName", (req, res) => {
+
+    Promise.all([
+      getCustomerByName(req.params.customerName),
+      getFlatFee()
+    ]).then((all) => {
+      customerQuote(res.body, all[1], all[0])
+        .then(quote => res.json(quote))
+        .catch((err) => res.json({
+          error: err.message
+        }));
+      })
+    .catch(err => res.json({
+      error: err.message
+    }));
+    
+  });
+
   return router;
 };
 
