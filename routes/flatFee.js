@@ -1,9 +1,33 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('flatFee', { title: 'Express' });
-});
+// In flat fee we can see the flat fee and update it 
+module.exports = ({
+  getFlatFee,
+  updateFlatFee
 
-module.exports = router;
+}) => {
+  
+  router.get("/", (req, res) => {
+
+    getFlatFee()
+      .then((flatFee) => res.json(flatFee))
+      .catch((err) => res.json({
+        error: err.message
+      }));
+    
+  });
+
+  router.post("/", (req, res) => {
+
+    updateFlatFee(res.body)
+      .then((flatFee) => res.json(flatFee))
+      .catch((err) => res.json({
+        error: err.message
+      }));
+    
+  });
+
+  return router;
+};
+

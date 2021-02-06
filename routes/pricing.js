@@ -1,9 +1,30 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('pricing', { title: 'Express' });
-});
+// In pricing we can get a quote for a generic customer and a specific customer
+module.exports = ({
+  getCustomerByName,
+  genericQuote,
+  customerQuote,
+  getFlatFee
 
-module.exports = router;
+}) => {
+  
+  router.get("/", (req, res) => {
+    getFlatFee()
+      .then((fee) => {
+        genericQuote(res.body, fee)
+          .then((quote) => res.json(quote))
+          .catch((err) => res.json({
+            error: err.message
+          }));
+      })
+      .catch((err) => res.json({
+        error: err.message
+      }));
+    
+  });
+
+  return router;
+};
+
