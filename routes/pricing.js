@@ -1,19 +1,19 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const { genericQuote, customerQuote } = require("../helperFunctions/quoteHelpers");
 
 // In pricing we can get a quote for a generic customer and a specific customer
 module.exports = ({
   getCustomerByName,
-  genericQuote,
-  customerQuote,
   getFlatFee
-
+  
 }) => {
   
   router.get("/", (req, res) => {
     getFlatFee()
       .then((fee) => {
-        genericQuote(res.body, fee)
+        console.log(fee);
+        genericQuote(res.body, fee.amount)
           .then((quote) => res.json(quote))
           .catch((err) => res.json({
             error: err.message

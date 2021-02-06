@@ -8,7 +8,7 @@ module.exports = ({
 
 }) => {
   
-  router.get("/", (req, res) => {
+  router.get("/flatfee", (req, res) => {
 
     getFlatFee()
       .then((flatFee) => res.json(flatFee))
@@ -18,7 +18,7 @@ module.exports = ({
     
   });
 
-  router.post("/", (req, res) => {
+  router.post("/flatfee", (req, res) => {
 
     updateFlatFee(res.body)
       .then((flatFee) => res.json(flatFee))

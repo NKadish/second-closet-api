@@ -177,19 +177,18 @@ module.exports = (db) => {
   const getFlatFee = () => {
 
     const query = {
-      text: `SELECT amount FROM general_fees WHERE name = flat_fee` ,
-      values: [name]
+      text: `SELECT amount FROM general_fees WHERE id = 1` ,
     };
 
     return db
       .query(query)
-      .then(result => result.rows[0].amount)
+      .then(result => result.rows)
       .catch((err) => err);
   };
 
   const updateFlatFee = (newFlatFee) => {
     const query = {
-      text: `UPDATE general_fees SET amount = $1 WHERE name = flat_fee`,
+      text: `UPDATE general_fees SET amount = $1 WHERE id = 1`,
       values: [newFlatFee]
     };
 

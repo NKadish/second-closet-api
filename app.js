@@ -3,8 +3,8 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 
-const customersRouter = require('./routes/index');
-const flatFeeRouter = require('./routes/users');
+const customersRouter = require('./routes/customers');
+const generalFeeRouter = require('./routes/generalFees');
 const pricingRouter = require('./routes/pricing');
 
 const app = express();
@@ -14,11 +14,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const db = require('./db');
-const dbHelpers = require('./helpers/dbHelpers')(db);
+const db = require('./dataBase');
+const dbHelpers = require('./helperFunctions/dbHelpers.js')(db);
 
 app.use('/customers', customersRouter(dbHelpers));
-app.use('/flatfee', flatFeeRouter(dbHelpers));
+app.use('/generalFees', generalFeeRouter(dbHelpers));
 app.use('/pricing', pricingRouter(dbHelpers));
 
 // catch 404 and forward to error handler
@@ -34,7 +34,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send('error');
 });
 
 module.exports = app;

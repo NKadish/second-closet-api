@@ -1,5 +1,3 @@
-module.exports = () => {
-
   const genericQuote = (items, flatFee) => {
       let quote = items.length * flatFee;
       return quote;
@@ -78,8 +76,8 @@ module.exports = () => {
 
   };
 
-  return {
+
+module.exports = {
     genericQuote,
     customerQuote
-  };
 };
