@@ -25,6 +25,17 @@ module.exports = (db) => {
       .catch((err) => err);
   };
 
+  const newCustomer = (name) => {
+    const query = {
+      text: `INSERT INTO customers (name) VALUES ($1) RETURNING *` ,
+      values: [name]
+    };
+
+    return db.query(query)
+      .then(result => result.rows[0])
+      .catch(err => err);
+  };
+
   const getDiscount = (name) => {
 
     const query = {
@@ -189,6 +200,7 @@ module.exports = (db) => {
   return {
     getCustomers,
     getCustomerByName,
+    newCustomer,
     getDiscount,
     updateDiscount,
     getVolumeCharge,
