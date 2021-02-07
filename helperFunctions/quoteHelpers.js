@@ -1,78 +1,93 @@
   const genericQuote = (items, flatFee) => {
       let quote = items.length * flatFee;
-      return quote;
-      
+      return '$' + quote.toFixed(2);
   };
 
   const customerQuote = (items, flatFee, customer) => {
 
-    const originalQuote = items.length * flatFee;
-    let updatedQuote = originalQuote
+    const originalQuote = items.length * flatFee.amount;
+      let updatedQuote = originalQuote
 
-    if (customer.per_unit_of_volume) {
-      let volume = 0;
+      const perUnitOfVolume = parseInt(customer.per_unit_of_volume, 10);
+      const percentValueCharge = parseInt(customer.percent_of_value_charge, 10);
+      const discount = parseInt(customer.discount, 10);
+      const firstHundredDiscount = parseInt(customer.first_hundred_discount, 10);
+      const secondHundredDiscount = parseInt(customer.second_hundred_discount, 10);
+      const discountPastTwoHundred = parseInt(customer.discount_after, 10);
 
-      items.forEach(element => {
-        let itemsVolume = element.length * element.width * element.height
-        volume += itemsVolume;
-      });
-      
-      updatedQuote += customer.per_unit_of_volume * volume;
-    };
+      if (perUnitOfVolume) {
+        let volume = 0;
 
-    if (customer.percent_of_value_charge) {
-      let value = 0;
+        items.forEach(element => {
+          let length = parseInt(element.length, 10);
+          let width = parseInt(element.width, 10);
+          let height = parseInt(element.height, 10);
+          let itemsVolume = length * width * height
+          volume += itemsVolume;
+        });
 
-      items.forEach(element => {
-        value += element.value;
-      });
+        updatedQuote += perUnitOfVolume * volume;
+        
+      };
 
-      updatedQuote += value * .05; 
-    };
+      if (percentValueCharge) {
+        let itemValue = 0;
 
-    if (customer.first_hundred_discount) {
-      updatedQuote -= (customer.first_hundred_discount / 100) * updatedQuote
-    }
+        items.forEach(element => {
+          let value = parseInt(element.value, 10);
+          itemValue += value;
+        });
 
-    // problem here though, what if % of value charge? 
-    if (customer.second_hundred_discount && items.length > 100) {
-      let quotePastHundred = 0
+        updatedQuote += itemValue * (percentValueCharge / 100); 
+      };
 
-      for (let i = 101; i < items.length; i++) {
-
-        if (customer.per_unit_of_volume) {
-          quotePastHundred += (element.length * element.width * element.height) * customer.per_unit_of_volume
-        };
-
-        quotePastHundred += flatFee;
+      if (firstHundredDiscount) {
+        updatedQuote -= (firstHundredDiscount / 100) * updatedQuote
       }
 
-      updatedQuote -= quotePastHundred;
-      updatedQuote += quotePastHundred * (customer.second_hundred_discount / 100);
-    }
+      // problem here though, what if % of value charge? 
+      if (secondHundredDiscount && items.length > 100) {
+        let quotePastHundred = 0
 
-    if (customer.discount_after && items.length > 200) {
-      let quotePastTwohundred = 0
+        for (let i = 101; i < items.length; i++) {
+          
+          if (perUnitOfVolume) {
+            let length = parseInt(element.length, 10);
+            let width = parseInt(element.width, 10);
+            let height = parseInt(element.height, 10);
+            quotePastHundred += (length * width * height) * customer.per_unit_of_volume
+          };
 
-      for (let i = 201; i < items.length; i++) {
+          quotePastHundred += flatFee.amount;
+        }
 
-        if (customer.per_unit_of_volume) {
-          quotePastHundred += (element.length * element.width * element.height) * customer.per_unit_of_volume
-        };
-
-        quotePastTwohundred += flatFee;
+        updatedQuote -= quotePastHundred;
+        updatedQuote += quotePastHundred * (secondHundredDiscount / 100);
       }
 
-      updatedQuote -= quotePastTwohundred;
-      updatedQuote += quotePastTwohundred * (customer.discount_after / 100);
-    }
+      if (discountPastTwoHundred && items.length > 200) {
+        let quotePastTwohundred = 0
 
-    if (customer.discount) {
-      updatedQuote -= (customer.discount / 100) * updatedQuote;
-    };
+        for (let i = 201; i < items.length; i++) {
 
-    // fix pricing so that it includes $ + .00
-    return updatedQuote;
+          if (perUnitOfVolume) {
+            let length = parseInt(element.length, 10);
+            let width = parseInt(element.width, 10);
+            let height = parseInt(element.height, 10);
+            quotePastTwoHundred += (length * width * height) * customer.per_unit_of_volume
+          };
+
+          quotePastTwohundred += flatFee.amount;
+        }
+
+        updatedQuote -= quotePastTwohundred;
+        updatedQuote += quotePastTwohundred * (discountPastTwoHundred / 100);
+      }
+
+      if (discount) {
+        updatedQuote -= (discount / 100) * updatedQuote;
+      };
+      return '$' + updatedQuote.toFixed(2);
 
   };
 
