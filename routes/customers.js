@@ -35,14 +35,22 @@ module.exports = ({
     
   });
 
-  // error for this if the customer already exists
   router.post("/:customerName", (req, res) => {
 
-    newCustomer(req.params.customerName)
-      .then((customer) => res.json(customer))
-      .catch((err) => res.json({
-        error: err.message
-      }));
+    getCustomerByName(req.params.customerName)
+    .then((customer) => {
+      if (customer) {
+        res.status(401).json({error: 'Sorry, a customer with this name already exists'});
+      } else {
+        newCustomer(req.params.customerName)
+        .then((newCustomer) => res.json(newCustomer))
+        .catch((err) => res.json({
+          error: err.message
+        }));
+      }
+    }).catch(err => res.json({
+      error: err.message
+    }));
     
   });
 
