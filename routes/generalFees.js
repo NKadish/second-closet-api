@@ -19,8 +19,8 @@ module.exports = ({
   });
 
   router.post("/flatfee", (req, res) => {
-
-    updateFlatFee(res.body)
+    console.log(req.body)
+    updateFlatFee(req.body.amount)
       .then((flatFee) => res.json(flatFee))
       .catch((err) => res.json({
         error: err.message

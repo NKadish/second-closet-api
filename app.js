@@ -2,6 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
+const bodyParser = require('body-parser');
 
 const customersRouter = require('./routes/customers');
 const generalFeeRouter = require('./routes/generalFees');
@@ -9,15 +10,18 @@ const pricingRouter = require('./routes/pricing');
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 const db = require('./dataBase');
 const dbHelpers = require('./helperFunctions/dbHelpers.js')(db);
 
-app.use('/customers', customersRouter(dbHelpers));
+app.use('/customers',  customersRouter(dbHelpers));
 app.use('/generalFees', generalFeeRouter(dbHelpers));
 app.use('/pricing', pricingRouter(dbHelpers));
 
