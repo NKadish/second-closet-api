@@ -1,7 +1,7 @@
   const genericQuote = (items, flatFee) => {
       let quote = items.length * flatFee;
       return quote;
-      // fix pricing so that it includes $ + .00
+      
   };
 
   const customerQuote = (items, flatFee, customer) => {
