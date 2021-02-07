@@ -4,7 +4,7 @@ var router = express.Router();
 // In customers we deal with creating the rules, new customers, getting both all and specific customers, and updating rules.
 module.exports = ({
   getCustomers,
-  getCustomersByName,
+  getCustomerByName,
   newCustomer,
   updateDiscount,
   updateVolumeCharge,
@@ -26,8 +26,8 @@ module.exports = ({
   });
 
   router.get("/:customerName", (req, res) => {
-    
-    getCustomersByName(req.params.customerName)
+
+    getCustomerByName(req.params.customerName)
       .then((customer) => res.json(customer))
       .catch((err) => res.json({
         error: err.message
@@ -35,6 +35,7 @@ module.exports = ({
     
   });
 
+  // error for this if the customer already exists
   router.post("/:customerName", (req, res) => {
 
     newCustomer(req.params.customerName)
