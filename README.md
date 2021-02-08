@@ -46,8 +46,10 @@ Use Postman to send JSON to the routes
 
 ## `/generalFees`
 
-- GET & POST({"newFee":x})
-- `/flatFee` GET & POST({"Amount":x})
+- GET 
+- POST({"newFee":x})
+- `/flatFee` GET 
+- `/flatFee` POST({"Amount":x})
 
 ## `/pricing`
 
