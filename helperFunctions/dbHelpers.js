@@ -196,6 +196,17 @@ module.exports = (db) => {
       .catch(err => err);
   };
 
+  const newGeneralFee = (name, amount) => {
+    const query = {
+      text: `INSERT INTO general_fees (name, amount) VALUES ($1, $2) RETURNING *` ,
+      values: [name, amount]
+    };
+
+    return db.query(query)
+      .then(result => result.rows[0])
+      .catch(err => err);
+  };
+
   return {
     getCustomers,
     getCustomerByName,
@@ -213,7 +224,8 @@ module.exports = (db) => {
     getDiscountAfter,
     updateDiscountAfter,
     getFlatFee,
-    updateFlatFee
+    updateFlatFee,
+    newGeneralFee
   };
 
 };

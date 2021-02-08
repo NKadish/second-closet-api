@@ -4,9 +4,18 @@ var router = express.Router();
 // In flat fee we can see the flat fee and update it 
 module.exports = ({
   getFlatFee,
-  updateFlatFee
+  updateFlatFee,
+  newGeneralFee
 
 }) => {
+
+  router.post("/", (req, res) =>{
+    newGeneralFee(req.body.name, req.body.amount)
+      .then((newFee) => res.json(newFee))
+      .catch((err) => res.json({
+        error: err.message
+      }));
+  })
   
   router.get("/flatfee", (req, res) => {
 
