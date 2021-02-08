@@ -63,7 +63,6 @@
         updatedQuote -= (firstHundredDiscount / 100) * updatedQuote
       }
 
-      // problem here though, what if % of value charge? 
       if (secondHundredDiscount && items.length > 100) {
         let quotePastHundred = 0
 

@@ -55,7 +55,7 @@ module.exports = ({
   });
 
   router.post("/discount/:customerName", (req, res) => {
-    // Takes an object that looks like {"discount": x}
+    // Takes an object that looks like {"discount": "x"}
     updateDiscount(req.params.customerName, req.body.discount)
       .then((discount) => res.json(discount))
       .catch((err) => res.json({
@@ -65,7 +65,7 @@ module.exports = ({
   });
 
   router.post("/volumeCharge/:customerName", (req, res) => {
-    // Takes an object that looks like {"volumeCharge": x}
+    // Takes an object that looks like {"volumeCharge": "x"}
     updateVolumeCharge(req.params.customerName, req.body.volumeCharge)
       .then((volumeCharge) => res.json(volumeCharge))
       .catch((err) => res.json({
@@ -75,7 +75,7 @@ module.exports = ({
   });
 
   router.post("/valueCharge/:customerName", (req, res) => {
-    // Takes an object that looks like {"valueCharge": x}
+    // Takes an object that looks like {"valueCharge": "x"}
     updatePercentValueCharge(req.params.customerName, req.body.valueCharge)
       .then((valueCharge) => res.json(valueCharge))
       .catch((err) => res.json({
@@ -85,7 +85,7 @@ module.exports = ({
   });
 
   router.post("/firstHundred/:customerName", (req, res) => {
-    // Takes an object that looks like {"firstHundred": x}
+    // Takes an object that looks like {"firstHundred": "x"}
     updateFirstHundredDiscount(req.params.customerName, req.body.firstHundred)
       .then((firstHundred) => res.json(firstHundred))
       .catch((err) => res.json({
@@ -95,7 +95,7 @@ module.exports = ({
   });
   
   router.post("/secondHundred/:customerName", (req, res) => {
-    // Takes an object that looks like {"secondHundred": x}
+    // Takes an object that looks like {"secondHundred": "x"}
     updateSecondHundredDiscount(req.params.customerName, req.body.secondHundred)
       .then((secondHundred) => res.json(secondHundred))
       .catch((err) => res.json({
@@ -105,7 +105,7 @@ module.exports = ({
   });
 
   router.post("/pastTwoHundred/:customerName", (req, res) => {
-    // Takes an object that looks like {"pastTwoHundred": x}
+    // Takes an object that looks like {"pastTwoHundred": "x"}
     updateDiscountAfter(req.params.customerName, req.body.pastTwoHundred)
       .then((pastTwoHundred) => res.json(pastTwoHundred))
       .catch((err) => res.json({

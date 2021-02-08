@@ -5,9 +5,20 @@ var router = express.Router();
 module.exports = ({
   getFlatFee,
   updateFlatFee,
+  getGeneralFees,
   newGeneralFee
 
 }) => {
+
+  router.get("/", (req, res) => {
+
+    getGeneralFees()
+      .then((generalFees) => res.json(generalFees))
+      .catch((err) => res.json({
+        error: err.message
+      }));
+    
+  });
 
   router.post("/", (req, res) =>{
     newGeneralFee(req.body.name, req.body.amount)
