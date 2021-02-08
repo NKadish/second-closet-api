@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 // In flat fee we can see the flat fee and update it 
 module.exports = ({
@@ -20,7 +20,8 @@ module.exports = ({
     
   });
 
-  router.post("/", (req, res) =>{
+  router.post("/", (req, res) => {
+    // takes in an object of {"feeName":x}
     newGeneralFee(req.body.name, req.body.amount)
       .then((newFee) => res.json(newFee))
       .catch((err) => res.json({
@@ -39,6 +40,7 @@ module.exports = ({
   });
 
   router.post("/flatfee", (req, res) => {
+    // updates flatFee, takes in an object of {"amount":x}
     console.log(req.body)
     updateFlatFee(req.body.amount)
       .then((flatFee) => res.json(flatFee))

@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 // In customers we deal with creating the rules, new customers, getting both all and specific customers, and updating rules.
 module.exports = ({
