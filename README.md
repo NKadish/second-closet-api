@@ -49,7 +49,7 @@ Use Postman to send JSON to the routes
 - GET 
 - POST({"newFee":x})
 - `/flatFee` GET 
-- `/flatFee` POST({"Amount":x})
+- `/flatFee` POST({"amount":x})
 
 ## `/pricing`
 
@@ -62,15 +62,11 @@ Use Postman to send JSON to the routes
 
 Mocha & Chai are used to test the quote helper functions
 
-To run: 
-
     > npm test
 
 ## Jest
 
-Jest is used to test the endpoints 
-
-To run: 
+Jest is used to test the endpoints  
 
     > npm run jest 
 
