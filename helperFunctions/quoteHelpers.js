@@ -1,9 +1,27 @@
   const genericQuote = (items, flatFee) => {
-      let quote = items.length * flatFee;
+      if (isNaN(flatFee.amount)) {
+        return 'Please input a number as a flat fee!'
+      };
+      if (!Array.isArray(items)) {
+        return 'Please input an object with an array of items!'
+      };
+      let quote = items.length * flatFee.amount;
       return '$' + quote.toFixed(2);
   };
 
   const customerQuote = (items, flatFee, customer) => {
+
+    if (isNaN(flatFee.amount)) {
+      return 'Please input a number as a flat fee!';
+    };
+
+    if (!Array.isArray(items)) {
+      return 'Please input an object with an array of items!';
+    };
+
+    if (typeof customer !== 'object') {
+      return 'Please input an object for the customer!';
+    };
 
     const originalQuote = items.length * flatFee.amount;
       let updatedQuote = originalQuote
@@ -27,7 +45,7 @@
         });
 
         updatedQuote += perUnitOfVolume * volume;
-        
+
       };
 
       if (percentValueCharge) {

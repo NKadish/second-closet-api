@@ -34,7 +34,7 @@ module.exports = ({
       .then((fee) => {
         console.log(fee.amount);
         console.log(req.body);
-        res.json(genericQuote(req.body.items, fee.amount));
+        res.json(genericQuote(req.body.items, fee));
       })
       .catch((err) => res.json({
         error: err.message
