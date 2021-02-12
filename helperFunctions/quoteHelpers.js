@@ -10,8 +10,41 @@ const genericQuote = (items, flatFee) => {
 };
 
 const customerQuote = (items, flatFee, customer) => {
+  validateParams(items, flatFee, customer);
+
+  const originalQuote = items.length * flatFee.amount;
+  let updatedQuote = originalQuote;
+
+  const perUnitOfVolume = parseInt(customer.per_unit_of_volume, 10);
+  const percentValueCharge = parseInt(customer.percent_of_value_charge, 10);
+
+  updatedQuote += calculateVolumeCharge(items, perUnitOfVolume);
+  updatedQuote += calculatePercentValueCharge(items, percentValueCharge);
+
+  updatedQuote = applyDiscounts(customer, items, updatedQuote);
+
+  return '$' + updatedQuote.toFixed(2);
+};
+
+/*
+ * This won't work as is, but typically you want to throw exceptions in these cases with the proper status and message.
+ * Thrown exceptions will be caught by your handlers, which can then propagate the error to the client.
+ *
+ * e.g. in your handler, when you catch an error:
+ * .catch((err) =>
+ *   res.status(err.status).json(err); // you can pass the err object directly into .json()
+ * );
+ */
+const validateParams = (items, fee, customer) => {
   if (isNaN(flatFee.amount)) {
-    return 'Please input a number as a flat fee!';
+    const err = {
+      status: 404,
+      message: 'invalid or missing flat fee',
+    };
+
+    // ideally you would build up all the validation errors into one error payload if possible
+    // so that the client knows every problem that requires fixing without having to submit repeatedly
+    throw err;
   }
 
   if (!Array.isArray(items)) {
@@ -21,18 +54,10 @@ const customerQuote = (items, flatFee, customer) => {
   if (typeof customer !== 'object') {
     return 'Please input an object for the customer!';
   }
+};
 
-  const originalQuote = items.length * flatFee.amount;
-  let updatedQuote = originalQuote;
-
-  const perUnitOfVolume = parseInt(customer.per_unit_of_volume, 10);
-  const percentValueCharge = parseInt(customer.percent_of_value_charge, 10);
-  const discount = parseInt(customer.discount, 10);
-  const firstHundredDiscount = parseInt(customer.first_hundred_discount, 10);
-  const secondHundredDiscount = parseInt(customer.second_hundred_discount, 10);
-  const discountPastTwoHundred = parseInt(customer.discount_after, 10);
-
-  if (perUnitOfVolume) {
+const calculateVolumeCharge = (items, charge) => {
+  if (charge) {
     let volume = 0;
 
     items.forEach((element) => {
@@ -43,10 +68,14 @@ const customerQuote = (items, flatFee, customer) => {
       volume += itemsVolume;
     });
 
-    updatedQuote += perUnitOfVolume * volume;
+    return charge * volume;
   }
 
-  if (percentValueCharge) {
+  return 0;
+};
+
+const calculatePercentValueCharge = (items, charge) => {
+  if (charge) {
     let itemValue = 0;
 
     items.forEach((element) => {
@@ -54,11 +83,20 @@ const customerQuote = (items, flatFee, customer) => {
       itemValue += value;
     });
 
-    updatedQuote += itemValue * (percentValueCharge / 100);
+    return itemValue * (charge / 100);
   }
 
+  return 0;
+};
+
+const applyDiscounts = (customer, items, quote) => {
+  const discount = parseInt(customer.discount, 10);
+  const firstHundredDiscount = parseInt(customer.first_hundred_discount, 10);
+  const secondHundredDiscount = parseInt(customer.second_hundred_discount, 10);
+  const discountPastTwoHundred = parseInt(customer.discount_after, 10);
+
   if (firstHundredDiscount) {
-    updatedQuote -= (firstHundredDiscount / 100) * updatedQuote;
+    quote -= (firstHundredDiscount / 100) * quote;
   }
 
   if (secondHundredDiscount && items.length > 100) {
@@ -76,8 +114,8 @@ const customerQuote = (items, flatFee, customer) => {
       quotePastHundred += flatFee.amount;
     }
 
-    updatedQuote -= quotePastHundred;
-    updatedQuote += quotePastHundred * (secondHundredDiscount / 100);
+    quote -= quotePastHundred;
+    quote += quotePastHundred * (secondHundredDiscount / 100);
   }
 
   if (discountPastTwoHundred && items.length > 200) {
@@ -95,14 +133,15 @@ const customerQuote = (items, flatFee, customer) => {
       quotePastTwohundred += flatFee.amount;
     }
 
-    updatedQuote -= quotePastTwohundred;
-    updatedQuote += quotePastTwohundred * (discountPastTwoHundred / 100);
+    quote -= quotePastTwohundred;
+    quote += quotePastTwohundred * (discountPastTwoHundred / 100);
   }
 
   if (discount) {
-    updatedQuote -= (discount / 100) * updatedQuote;
+    quote -= (discount / 100) * quote;
   }
-  return '$' + updatedQuote.toFixed(2);
+
+  return quote;
 };
 
 module.exports = {
